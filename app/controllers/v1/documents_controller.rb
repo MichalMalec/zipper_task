@@ -1,6 +1,6 @@
 class V1::DocumentsController < ApplicationController
     def create
-        @document = Document.new(document_params)
+        @document = current_user.documents.build(document_params)
     
         if @document.save
           render json: { id: @document.id, title: @document.title, file_url: url_for(@document.file) }, status: :created
