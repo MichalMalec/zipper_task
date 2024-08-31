@@ -1,4 +1,9 @@
 class V1::DocumentsController < ApplicationController
+    def index
+        @documents = current_user.documents
+        render json: @documents, status: :ok
+    end
+    
     def create
         @document = current_user.documents.build(document_params)
     
