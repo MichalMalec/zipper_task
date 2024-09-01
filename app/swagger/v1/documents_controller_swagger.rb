@@ -1,6 +1,9 @@
-class V1::DocumentsControllerSwagger
+# frozen_string_literal: true
+
+module V1
+  class DocumentsControllerSwagger
     include Swagger::Blocks
-  
+
     swagger_path '/v1/documents' do
       operation :get do
         key :summary, 'Get a list of documents'
@@ -8,7 +11,7 @@ class V1::DocumentsControllerSwagger
         key :operationId, 'getDocuments'
         key :produces, ['application/json']
         key :tags, ['Documents']
-  
+
         response 200 do
           key :description, 'List of documents'
           schema type: :array do
@@ -18,27 +21,27 @@ class V1::DocumentsControllerSwagger
           end
         end
       end
-  
+
       operation :post do
         key :summary, 'Create a new document'
         key :description, 'Creates a new document and returns download link with a password'
         key :operationId, 'createDocument'
         key :produces, ['application/json']
         key :tags, ['Documents']
-  
+
         parameter name: :document, in: :body, required: true, description: 'Document to create' do
           schema do
             key :'$ref', :DocumentInput
           end
         end
-  
+
         response 201 do
           key :description, 'Document created successfully'
           schema do
             key :'$ref', :DocumentOutput
           end
         end
-  
+
         response 422 do
           key :description, 'Validation errors'
           schema do
@@ -48,4 +51,4 @@ class V1::DocumentsControllerSwagger
       end
     end
   end
-  
+end

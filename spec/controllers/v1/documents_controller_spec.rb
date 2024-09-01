@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe V1::DocumentsController, type: :controller do
   let(:user) { create(:user) }
-  let(:document) { build(:document, user: user) }
+  let(:document) { build(:document, user:) }
 
   before do
     sign_in user
@@ -10,7 +12,7 @@ RSpec.describe V1::DocumentsController, type: :controller do
 
   describe 'GET #index' do
     it 'returns a list of documents for the current user' do
-      documents = create_list(:document, 3, user: user)
+      documents = create_list(:document, 3, user:)
       get :index
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body).size).to eq(3)
@@ -25,8 +27,8 @@ RSpec.describe V1::DocumentsController, type: :controller do
         allow(ZipGenerator).to receive(:generate_zip_with_password).and_return('path/to/zip_file.zip')
 
         file = fixture_file_upload('sample_file.txt')
-        post :create, params: { document: { title: 'Sample Document', file: file } }
-        
+        post :create, params: { document: { title: 'Sample Document', file: } }
+
         expect(response).to have_http_status(:created)
         response_body = JSON.parse(response.body)
         expect(response_body['title']).to eq('Sample Document')
@@ -39,8 +41,8 @@ RSpec.describe V1::DocumentsController, type: :controller do
     context 'with invalid attributes' do
       it 'does not create a new document and returns an error response' do
         file = fixture_file_upload('sample_file.txt')
-        post :create, params: { document: { title: '', file: file } }
-        
+        post :create, params: { document: { title: '', file: } }
+
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)['errors']).to include("Title can't be blank")
       end
@@ -76,14 +78,14 @@ RSpec.describe V1::DocumentsController, type: :controller do
         document = build(:document, title: 'Sample Document')
         download_link = 'http://example.com/downloads/zip_file.zip'
         password = 'password123'
-        
+
         response = controller.send(:success_response, document, download_link, password)
-        
+
         expect(response).to eq({
-          title: 'Sample Document',
-          download_link: download_link,
-          password: password
-        })
+                                 title: 'Sample Document',
+                                 download_link:,
+                                 password:
+                               })
       end
     end
   end

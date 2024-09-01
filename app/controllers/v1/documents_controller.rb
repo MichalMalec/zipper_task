@@ -1,58 +1,62 @@
-class V1::DocumentsController < ApplicationController
-  def index
-    @documents = documents
-    render json: @documents, status: :ok
-  end
-  
-  def create
-    document = build_document
+# frozen_string_literal: true
 
-    if document.save
-      handle_successful_save(document)
-    else
-      handle_failed_save(document)
+module V1
+  class DocumentsController < ApplicationController
+    def index
+      @documents = documents
+      render json: @documents, status: :ok
     end
-  end
-  
-  private
 
-  def documents
-    current_user.documents
-  end
+    def create
+      document = build_document
 
-  def build_document
-    current_user.documents.build(document_params)
-  end
+      if document.save
+        handle_successful_save(document)
+      else
+        handle_failed_save(document)
+      end
+    end
 
-  def document_params
-    params.require(:document).permit(:title, :file)
-  end
+    private
 
-  def handle_successful_save(document)
-    password = generate_random_password
-    zip_file_path = ZipGenerator.generate_zip_with_password(document, password)
-    download_link = generate_download_link(zip_file_path)
+    def documents
+      current_user.documents
+    end
 
-    render json: success_response(document, download_link, password), status: :created
-  end
+    def build_document
+      current_user.documents.build(document_params)
+    end
 
-  def handle_failed_save(document)
-    render json: { errors: document.errors.full_messages }, status: :unprocessable_entity
-  end
+    def document_params
+      params.require(:document).permit(:title, :file)
+    end
 
-  def generate_random_password
-    SecureRandom.hex(8)
-  end
+    def handle_successful_save(document)
+      password = generate_random_password
+      zip_file_path = ZipGenerator.generate_zip_with_password(document, password)
+      download_link = generate_download_link(zip_file_path)
 
-  def generate_download_link(zip_file_path)
-    "#{request.base_url}/downloads/#{File.basename(zip_file_path)}"
-  end
+      render json: success_response(document, download_link, password), status: :created
+    end
 
-  def success_response(document, download_link, password)
-    {
-      title: document.title,
-      download_link: download_link,
-      password: password
-    }
+    def handle_failed_save(document)
+      render json: { errors: document.errors.full_messages }, status: :unprocessable_entity
+    end
+
+    def generate_random_password
+      SecureRandom.hex(8)
+    end
+
+    def generate_download_link(zip_file_path)
+      "#{request.base_url}/downloads/#{File.basename(zip_file_path)}"
+    end
+
+    def success_response(document, download_link, password)
+      {
+        title: document.title,
+        download_link:,
+        password:
+      }
+    end
   end
 end

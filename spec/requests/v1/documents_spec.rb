@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'V1::Documents', type: :request do
@@ -10,7 +12,7 @@ RSpec.describe 'V1::Documents', type: :request do
 
   describe 'GET /v1/documents' do
     it 'returns a list of documents' do
-      create_list(:document, 3, user: user)
+      create_list(:document, 3, user:)
 
       get '/v1/documents', headers: { 'Authorization' => @auth_token }
 
@@ -27,7 +29,8 @@ RSpec.describe 'V1::Documents', type: :request do
 
         file = fixture_file_upload('sample_file.txt')
 
-        post '/v1/documents', params: { document: { title: 'Sample Document', file: file } }, headers: { 'Authorization' => @auth_token }
+        post '/v1/documents', params: { document: { title: 'Sample Document', file: } },
+                              headers: { 'Authorization' => @auth_token }
 
         expect(response).to have_http_status(:created)
         response_body = JSON.parse(response.body)
@@ -41,7 +44,8 @@ RSpec.describe 'V1::Documents', type: :request do
       it 'does not create a new document and returns an error response' do
         file = fixture_file_upload('sample_file.txt')
 
-        post '/v1/documents', params: { document: { title: '', file: file } }, headers: { 'Authorization' => @auth_token }
+        post '/v1/documents', params: { document: { title: '', file: } },
+                              headers: { 'Authorization' => @auth_token }
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)['errors']).to include("Title can't be blank")
