@@ -9,7 +9,7 @@ class Document < ApplicationRecord
   private
 
   def file_size_validation
-    if file.attached? && file.blob.byte_size > 5.megabytes
+    if file.attached? && file.blob.byte_size > 500.kilobytes
       errors.add(:file, 'size should be less than 5MB')
     elsif file.attached? == false
       errors.add(:file, 'must be attached')
