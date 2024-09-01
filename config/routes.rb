@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   namespace :v1 do
     resources :documents, only: [:index, :create]
   end
+
+  get '/api/docs', to: 'api_docs#index'
   # Defines the root path route ("/")
   # root "articles#index"
 end
