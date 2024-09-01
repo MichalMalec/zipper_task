@@ -8,7 +8,10 @@ class V1::DocumentsController < ApplicationController
         @document = current_user.documents.build(document_params)
     
         if @document.save
-          render json: { id: @document.id, title: @document.title, file_url: url_for(@document.file) }, status: :created
+          zip_file_path = ZipGenerator.generate_zip(@document)
+          download_link = "#{request.base_url}/downloads/#{File.basename(zip_file_path)}"
+  
+          render json: { id: @document.id, title: @document.title, download_link: download_link }, status: :created
         else
           render json: { errors: @document.errors.full_messages }, status: :unprocessable_entity
         end
