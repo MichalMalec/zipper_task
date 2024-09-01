@@ -4,4 +4,15 @@ class Document < ApplicationRecord
   belongs_to :user
 
   validates :title, presence: true
+  validate :file_size_validation
+
+  private
+
+  def file_size_validation
+    if file.attached? && file.blob.byte_size > 5.megabytes
+      errors.add(:file, 'size should be less than 5MB')
+    elsif file.attached? == false
+      errors.add(:file, 'must be attached')
+    end
+  end
 end
