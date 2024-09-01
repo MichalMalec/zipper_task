@@ -8,6 +8,8 @@ class ZipGenerator
       file_name = "#{document.title.parameterize}.zip"
       file_path = Rails.root.join('public', 'downloads', file_name)
 
+      File.delete(file_path) if File.exist?(file_path)
+
       Zip::File.open(file_path, Zip::File::CREATE) do |zipfile|
         original_file = document.file.download
         original_filename = document.file.filename.to_s
