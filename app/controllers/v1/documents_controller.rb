@@ -1,6 +1,7 @@
 class V1::DocumentsController < ApplicationController
   def index
-    render json: documents, status: :ok
+    @documents = documents
+    render json: @documents, status: :ok
   end
   
   def create
