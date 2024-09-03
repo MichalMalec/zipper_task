@@ -1,24 +1,12 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This API allows to:
+1. Authenticate user
+2. Upload file and get in response zipped file with password to open it
+3. List all files uploaded by user
 
-Things you may want to cover:
+* Start server
+`bin/rails s`
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Swagger docs
+`http://127.0.0.1:3000/api/docs`
